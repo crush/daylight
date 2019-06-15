@@ -1,0 +1,2 @@
+recursive-include daylight/templates *
+recursive-include daylight/static *
