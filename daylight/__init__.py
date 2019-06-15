@@ -14,4 +14,4 @@ if not app.debug:
     file_handler.setFormatter(logging.Formatter('<%(asctime)s> <%(levelname)s> %(message)s'))
     app.logger.addHandler(file_handler)
 
-import daylight.views
+import daylight.routes
