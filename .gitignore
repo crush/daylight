@@ -1,3 +1,4 @@
 daylight.egg-info/
 daylight/__pycache__/
 venv/
+.mypy_cache/

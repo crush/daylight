@@ -6,6 +6,9 @@ clean:
 format:
 	black -l 80 daylight
 
+type-check: format
+	mypy daylight
+
 deps-dev: venv
 	pip install --user -r requirements_dev.txt
 
