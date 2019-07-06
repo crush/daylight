@@ -3,6 +3,13 @@ import os
 from typing import Any, Dict, Optional
 
 
+_CONFIG_PARAMS = [
+    'POSTGRES_HOST',
+    'POSTGRES_USER',
+    'POSTGRES_PASSWORD',
+    'POSTGRES_DATABASE'
+]
+
 def load(defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     '''Prepare a configuration by replacing a set of defaults with values pulled
     from environment variables.
@@ -16,12 +23,8 @@ def load(defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     env = os.environ
     config = defaults.copy() if defaults is not None else {}
 
-    config.update({
-        'POSTGRES_HOST': env['POSTGRES_HOST'],
-        'POSTGRES_USER': env['POSTGRES_USER'],
-        'POSTGRES_PASSWORD': env['POSTGRES_PASSWORD'],
-        'POSTGRES_DATABASE': env['POSTGRES_DATABASE']
-    })
+    for param in _CONFIG_PARAMS:
+        config[param] = env[param]
 
     return config
 
