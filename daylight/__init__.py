@@ -1,6 +1,10 @@
 import os
 from flask import Flask
 
+import config
+import config.dev
+
+
 app = Flask(__name__)
 app.config.from_object("daylight.default_settings")
 app.config.from_envvar("DAYLIGHT_SETTINGS")
@@ -18,5 +22,10 @@ if not app.debug:
         logging.Formatter("<%(asctime)s> <%(levelname)s> %(message)s")
     )
     app.logger.addHandler(file_handler)
+
+
+cfg = config.load(config.dev.DEFAULTS)
+
+print('Loaded configuration', cfg)
 
 import daylight.routes
