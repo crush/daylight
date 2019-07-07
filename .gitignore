@@ -1,5 +1,6 @@
 daylight.egg-info/
 daylight/__pycache__/
+daylight/config/__pycache__/
 venv/
 .mypy_cache/
 *.swp

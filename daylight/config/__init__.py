@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+import dataclasses
 import os
 from typing import Any, Dict, Optional
 
@@ -24,7 +24,10 @@ def load(defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     config = defaults.copy() if defaults is not None else {}
 
     for param in _CONFIG_PARAMS:
-        config[param] = env[param]
+        try:
+            config[param] = env[param]
+        except KeyError:
+            continue
 
     return config
 

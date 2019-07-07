@@ -1,8 +1,8 @@
 import os
 from flask import Flask
 
-import config
-import config.dev
+import daylight.config as config
+import daylight.config.dev as dev
 
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ if not app.debug:
     app.logger.addHandler(file_handler)
 
 
-cfg = config.load(config.dev.DEFAULTS)
+cfg = config.load(dev.DEFAULTS)
 
 print('Loaded configuration', cfg)
 
