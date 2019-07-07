@@ -1,8 +1,11 @@
 import os
+
 from flask import Flask
+import psycopg2 as postgres
 
 import daylight.config as config
 import daylight.config.dev as dev
+import daylight.db.tables as db_tables
 
 
 app = Flask(__name__)
@@ -25,7 +28,13 @@ if not app.debug:
 
 
 cfg = config.load(dev.DEFAULTS)
-
 print('Loaded configuration', cfg)
+
+
+conn = postgres.connect(config.postgres_url(cfg))
+with conn.cursor() as cursor:
+    db_tables.create_tables(cursor)
+conn.close()
+print('Created database tables')
 
 import daylight.routes

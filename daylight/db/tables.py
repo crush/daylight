@@ -57,7 +57,7 @@ _QUERIES = {
     ''',
 
     'init_tag_table': '''
-    create table if not exist tags(
+    create table if not exists tags(
         tag varchar(32) primary key
     );
     ''',
@@ -74,11 +74,12 @@ _QUERIES = {
 
     'init_photo_table': '''
     create table if not exists photos(
-        image_source varchar(255) primary key,
+        id integer primary key,
+        image_source varchar(255) unique not null,
         owner integer not null,
         upload_date timestamp not null,
 
-        foreign key (owner) references users (id),
+        foreign key (owner) references users (id)
     );
     ''',
 
@@ -121,6 +122,6 @@ def create_tables(db_conn):
     ]
 
     for query in order:
-        db_conn.execute(QUERY[query])
+        db_conn.execute(_QUERIES[query])
 
     return True
