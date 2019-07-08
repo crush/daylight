@@ -7,7 +7,7 @@ class User:
     '''Model for a `User` entity.
     '''
 
-    id: int
+    _id: int
     email: str
     password_hash: str
     join_date: datetime

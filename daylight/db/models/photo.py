@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
+
+from daylight.db.models import User
 
 
 @dataclass
@@ -7,7 +10,14 @@ class Photo:
     '''Model for a `Photo` entity.
     '''
 
-    id: int
+    _id: int
     image_source: str
-    owner: int
+    _owner: int
     upload_date: datetime
+
+
+    def owner(self) -> Optional[User]:
+        '''Retrieve the `User` that owns the photo.
+        '''
+
+        return None
