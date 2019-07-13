@@ -1,4 +1,5 @@
 from daylight.routes.register import register
+from daylight.routes.complete_registration import complete_registration
 from daylight.routes.login import login 
 from daylight.routes.logout import logout 
 from daylight.routes.profile import profile
