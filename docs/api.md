@@ -11,6 +11,22 @@ Throughout this document, the following conventions are used:
   3. URLs _never_ contain path parameters such as `/users/:id/profile`.
   4. Requests using HTTP methods that do no accept bodies such as `GET` take
   their arguments as query parameters like `GET /users?id=abd123`.
+  5. JSON is always written back, with a top level data structure containing an
+  optional `error` and a `data` container.
+
+# Types
+
+There are some shared types used throughout the API defined here.
+
+```typescript
+type UserProfile = {
+  "username": string,
+  "pronouns": string,
+  "profilePicture": string,
+  "tags": Array<string>,
+  "biography": string
+};
+```
 
 ## User Registration
 
@@ -18,14 +34,60 @@ Throughout this document, the following conventions are used:
 POST /users/register
 ```
 
+Crate a new user account, resulting in an email being sent to the user
+containing a one-time registration token.  Sending that token to the
+[Complete Registration](#complete-registration) endpoint will establish the
+user.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "username": string,
+  "email": string,
+  "password": string,
+  "account_type": "womanfemme" | "manmasc"
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
+```
+
+**Status Codes**
+
+## Complete Registration
+
+```
+GET /users/register/complete
+```
+
+Complete a user registration when a user clicks a link in their email
+containing a one-time, short-lived token.
+
+**Parameters**
+
+```typescript
+{
+  "token": string,
+  "sent": date
+}
+```
+
+**Response**
+
+```typescript
+{
+  "error": null | string,
+  "data": null | {
+    "session": string
+  }
+}
 ```
 
 ## User Login
@@ -34,14 +96,26 @@ POST /users/register
 POST /users/login
 ```
 
+Establish a session for a user.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "username": string,
+  "password": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | sting,
+  "data": null | {
+    "session": string
+  }
+}
 ```
 
 ## User Logout
@@ -50,14 +124,23 @@ POST /users/login
 POST /users/logout
 ```
 
+Terminate a user's session.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
 
 ## Read Profile
@@ -66,14 +149,23 @@ POST /users/logout
 GET /users/
 ```
 
+Retrieve a user's profile for viewing.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "username": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null | UserProfile
+}
 ```
 
 ## Update Profile
@@ -82,14 +174,24 @@ GET /users/
 PUT /users/
 ```
 
+Update a user's profile.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string,
+  "profile": UserProfile
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
 
 ## Upload Photo
@@ -98,14 +200,27 @@ PUT /users/
 POST /users/photos
 ```
 
+Upload a photo encoded as base64.
+
+  * Photos must be no larger than 1MB.
+  * Users are limited to 4 photos each.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string,
+  "photo": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
 
 ## Delete a Photo
@@ -114,14 +229,24 @@ POST /users/photos
 DELETE /users/photos
 ```
 
+Remove a photo from the user's profile.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string,
+  "photo": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
 
 ## List Potential Matches
@@ -130,14 +255,24 @@ DELETE /users/photos
 GET /users/suggest
 ```
 
+Retrieve a list of users suggested as potential matches.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null | {
+    "users": Array<UserProfile>
+  }
 ```
 
 
@@ -147,14 +282,24 @@ GET /users/suggest
 PUT /users/like
 ```
 
+Send a like to a user.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string,
+  "username": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
 
 ## List Established Matches
@@ -163,14 +308,22 @@ PUT /users/like
 GET /matches
 ```
 
+Retrieve a list of current matches.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null | Array<UserProfile>
 ```
 
 ## Unmatch a User
@@ -179,14 +332,24 @@ GET /matches
 DELETE /matches
 ```
 
+Remove a match from the user's queue.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string,
+  "username": string
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
 
 ## Send Experience Rating
@@ -195,12 +358,26 @@ DELETE /matches
 POST /matches/experience
 ```
 
+After a match expires, send a rating from a woman/femme user about a man/masc
+user.  Rating scores must be `1 <= x <= 5`.
+
 **Parameters**
 
-```json
+```typescript
+{
+  "session": string,
+  "username": string,
+  "respectfulness": number,
+  "knowledge": number,
+  "supportiveness": number
+}
 ```
 
 **Response**
 
-```json
+```typescript
+{
+  "error": null | string,
+  "data": null
+}
 ```
