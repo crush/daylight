@@ -12,6 +12,15 @@ _QUERIES = {
     );
     ''',
 
+    'init_registration_request_table': '''
+    create table if not exists registration_requests(
+        email varchar(255) primary key,
+        password_hash varchar(128) not null,
+        created timestamp not null,
+        token varchar(32) unique not null
+    );
+    ''',
+
     'init_match_table': '''
     create table if not exists matches(
         first_user integer not null,
@@ -111,6 +120,7 @@ def create_tables(db_conn):
 
     order = [
         'init_user_table',
+        'init_registration_request_table',
         'init_match_table',
         'init_likes_relation_table',
         'init_photo_table',
