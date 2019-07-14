@@ -1,6 +1,6 @@
 from daylight import app
 
 
-@app.routes('/users', methods=['PUT'])
+@app.route('/users', methods=['PUT'])
 def update_profile():
     return 'Not implemented'

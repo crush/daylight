@@ -1,7 +1,7 @@
 from daylight import app
 
 
-@app.routes('/users/logout', methods=['POST'])
+@app.route('/users/logout', methods=['POST'])
 def logout():
     return 'Not implemented'
 

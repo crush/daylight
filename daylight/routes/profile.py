@@ -1,6 +1,6 @@
 from daylight import app
 
 
-@app.routes('/users')
+@app.route('/users')
 def profile():
     return 'Not implemented'
