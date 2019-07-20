@@ -4,27 +4,37 @@ queries against the database.
 
 import enum
 from typing import Optional
+from threading import Lock
 
 import psycopg2 as postgres
 
-from daylight.db.engine.query import Mutation, Query
+import daylight.db.engine.effects as effects
+import effects.State as State
+from daylight.db.engine.query import Mutation, MutationId, Query, QueryId
 from daylight.db.engine.tables import create_tables
 
 
 class DBErrorKind(enum.Enum):
-    '''Enumerates all of the errors that a `DaylightDB` may raise.
+    '''Enumerates all of the classes of errors that a `DaylightDB` may raise.
     '''
 
     CONNECTION_ERROR = 'CONNECTION ERROR' 
+    UNSUPPORTED_QUERY = 'UNSUPPORTED QUERY'
+    UNSUPPORTED_MUTATION = 'UNSUPPORTED MUTATION'
+    EXECUTION_ERROR = 'EXECUTION ERROR'
+    INTERNAL_ERROR = 'INTERNAL ERROR'
+    PROGRAMMING_ERROR = 'PROGRAMMING ERROR'
 
 
 class DBError(Exception):
-    '''Errors that may be raised by the `DaylightDB`.
+    '''The only type of exception that `DaylightDB` may raise.  All variance
+    is accounted for in the `DBErrorKind` enumeration.
     '''
 
     def __init__(self, kind: DBErrorKind, msg: str):
-        self.message = f'Database error: {kind}: {msg}'
-        
+        self.kind: DBErrorKind = kind
+        self.message: str = f'Database error: {kind}: {msg}'
+
 
 class DaylightDB:
     '''The primary abstraction over a connection to a Postgres database.
@@ -35,6 +45,7 @@ class DaylightDB:
     def __init__(self, postgres_url: str):
         self._conn_url: str = postgres_url
         self._connection: Optional[postgres.connection] = None
+        self._lock: Lock = Lock()
 
 
     def connect_to_backend(self):
@@ -56,8 +67,10 @@ class DaylightDB:
         try:
             self._connection = postgres.connect(self._conn_url)
 
+            self._lock.acquire()
             with self._connection.cursor() as cursor:
                 create_tables(cursor)
+            self._lock.release()
 
         except postgres.ProgrammingError:
             raise DBError(DBErrorKind.CONNECTION_ERROR, 'invalid connection string')
@@ -75,15 +88,136 @@ class DaylightDB:
         not have any effect beyond the first disconnection.
         '''
 
+        self._lock.acquire()
         if self._connection is not None:
             self._connection.close()
+        self._lock.release()
 
 
-    def search(self, q: Query):
-        '''
+    def search(self, q: Query) -> State:
+        '''Execute a search query against the database.
         '''
 
+        allowed_effects = {
+            QueryId.__RETRIEVE_USER_BY_ID: effects.retrieve_user
+        }
 
-    def execute(self, m: Mutation):
+        effect = allowed_effects.get(q.query_id)
+        if effect is None:
+            raise DBError(
+                    DBErrorKind.UNSUPPORTED_QUERY,
+                    f'unsupported query {q.query_id}')
+
+        self._lock.acquire()
+        with self._connection.cursor() as cursor:
+            try:
+                return effect(cursor, *q.parmeters)
+
+            except postgres.InterfaceError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'{err.message}')
+
+            except postgres.DatabaseError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'{err.message}')
+
+            except postgres.DataError as err:
+                raise DBError(
+                        DBErrorKind.EXECUTION_ERROR,
+                        f'query execution failed: {err.message}')
+
+            except postgres.OperationalError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'unexpected database error: {err.message}')
+
+            except postgres.IntegrityError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'failed to maintain relation integrity: {err.message}')
+
+            except postgres.InternalError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'unexpected database error {err.message}')
+
+            except postgres.ProgrammingError as err:
+                raise DBError(
+                        DBErrorKind.PROGRAMMING_ERROR,
+                        f'bad effect {effect.__name__}: {err.message}')
+
+            except postgres.NotSupportedError as err:
+                raise DBError(
+                        DBErrorKind.PROGRAMMING_ERROR,
+                        f'bad effect {effect.__name__}: {err.message}')
+       
+            finally:
+                self._lock.release()
+
+
+    def execute(self, m: Mutation) -> State:
+        '''Execute a mutation query against the database.
         '''
-        '''
+
+        allowed_effects = {
+            MutationId.__REGISTER_USER: effects.create_user
+        }
+
+        effect = allowed_effects.get(m.mutation_id)
+        if effect is None:
+            raise DBError(
+                    DBErrorKind.UNSUPPORTED_MUTATION,
+                    f'unsupported mutation {m.mutation_id}')
+
+        self._lock.acquire()
+        with self._connection.cursor() as cursor:
+            try:
+                result = effect(cursor, *m.parameters)
+                cursor.commit()
+
+                return result
+            
+            except postgres.InterfaceError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'{err.message}')
+
+            except postgres.DatabaseError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'{err.message}')
+
+            except postgres.DataError as err:
+                raise DBError(
+                        DBErrorKind.EXECUTION_ERROR,
+                        f'query execution failed: {err.message}')
+
+            except postgres.OperationalError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'unexpected database error: {err.message}')
+
+            except postgres.IntegrityError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'failed to maintain relation integrity: {err.message}')
+
+            except postgres.InternalError as err:
+                raise DBError(
+                        DBErrorKind.INTERNAL_ERROR,
+                        f'unexpected database error {err.message}')
+
+            except postgres.ProgrammingError as err:
+                raise DBError(
+                        DBErrorKind.PROGRAMMING_ERROR,
+                        f'bad effect {effect.__name__}: {err.message}')
+
+            except postgres.NotSupportedError as err:
+                raise DBError(
+                        DBErrorKind.PROGRAMMING_ERROR,
+                        f'bad effect {effect.__name__}: {err.message}')
+        
+            finally:
+                self._lock.release()
