@@ -10,7 +10,6 @@ class DaylightTestCase(unittest.TestCase):
 
     def test_index(self):
         rv = self.app.get('/')
-        self.assertIn('Welcome to daylight', rv.data.decode())
 
 
 if __name__ == '__main__':
