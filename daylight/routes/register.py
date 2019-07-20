@@ -25,6 +25,6 @@ class _Response:
 @app.route('/users/register', methods=['POST'])
 def register():
     req = _Request(**request.json)
-    res = _Response('test error')
+    res = _Response('test error', None)
 
     return json.dumps(res)
