@@ -1,11 +1,10 @@
 import os
 
 from flask import Flask
-import psycopg2 as postgres
 
 import daylight.config as config
 import daylight.config.dev as dev
-import daylight.db.engine.tables as db_tables
+from daylight.db.engine import DaylightDB, DBError, DBErrorKind
 
 
 app = Flask(__name__)
@@ -31,10 +30,10 @@ cfg = config.load(dev.DEFAULTS)
 print('Loaded configuration', cfg)
 
 
-conn = postgres.connect(config.postgres_url(cfg))
-with conn.cursor() as cursor:
-    db_tables.create_tables(cursor)
-conn.close()
+db = DaylightDB(config.postgres_url(cfg))
+db.connect_to_backend()
 print('Created database tables')
+db.disconnect()
+
 
 import daylight.routes
