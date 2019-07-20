@@ -5,7 +5,7 @@ import psycopg2 as postgres
 
 import daylight.config as config
 import daylight.config.dev as dev
-import daylight.db.tables as db_tables
+import daylight.db.engine.tables as db_tables
 
 
 app = Flask(__name__)
