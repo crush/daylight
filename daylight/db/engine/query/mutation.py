@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import enum
 from typing import Any, List
 
-import db.query.security as security
+import daylight.db.engine.query.security as security
 
 
 class MutationId(enum.Enum):

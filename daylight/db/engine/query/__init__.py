@@ -1,2 +1,2 @@
-from mutation import Mutation
-from query import Query
+from daylight.db.engine.query.mutation import Mutation
+from daylight.db.engine.query.query import Query
