@@ -58,7 +58,7 @@ def reset_password(updated_user: models.User) -> Mutation:
     '''
 
     new_password = security.hash_password(new_password)
-    return Mutation(MutationId.__RESET_PASSWORD, [user_id, new_password])
+    return Mutation(MutationId.__RESET_PASSWORD, [user, new_password])
 
 
 def delete_user_account(user: models.User) -> Mutation:
@@ -66,21 +66,21 @@ def delete_user_account(user: models.User) -> Mutation:
     and all related data.
     '''
 
-    return Mutation(MutationId.__DELETE_USER, [user_id])
+    return Mutation(MutationId.__DELETE_USER, [user])
 
 
-def establish_match(from_user_id: int, to_user_id: int) -> Mutation:
+def establish_match(from_user: models.User, to_user: models.User) -> Mutation:
     '''Create a `Mutation` that creates a match between two users.
     '''
 
-    return Mutation(MutationId.__MATCH_USERS, [from_user_id, to_user_id])
+    return Mutation(MutationId.__MATCH_USERS, [from_user, to_user])
 
 
 def unmatch(match: models.Match) -> Mutation:
     '''Create a `Mutation` that will delete a match between two users.
     '''
 
-    return Mutation(MutationId.__UNMATCH, [from_user_id, to_user_id])
+    return Mutation(MutationId.__UNMATCH, [match])
 
 
 def update_user_profile(updated_profile: models.Profile) -> Mutation:
