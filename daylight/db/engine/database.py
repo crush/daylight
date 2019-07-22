@@ -99,7 +99,7 @@ class DaylightDB:
         '''
 
         allowed_effects = {
-            QueryId.__RETRIEVE_USER_BY_ID: effects.retrieve_user
+            QueryId.__RETRIEVE_USER_BY_ID: effects.retrieve_user,
         }
 
         effect = allowed_effects.get(q.query_id)
@@ -162,7 +162,9 @@ class DaylightDB:
         '''
 
         allowed_effects = {
-            MutationId.__REGISTER_USER: effects.create_user
+            MutationId.__REGISTER_USER: effects.create_user,
+            MutationId.__RESET_PASSWORD: effects.reset_password,
+            MutationId.__DELETE_USER: effects.delete_user,
         }
 
         effect = allowed_effects.get(m.mutation_id)
