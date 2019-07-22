@@ -5,6 +5,8 @@ from flask import Flask
 import daylight.config as config
 import daylight.config.dev as dev
 from daylight.db.engine import DaylightDB, DBError, DBErrorKind
+import daylight.db.engine.query as query
+import daylight.db.models as models
 
 
 app = Flask(__name__)
@@ -33,6 +35,14 @@ print('Loaded configuration', cfg)
 db = DaylightDB(config.postgres_url(cfg))
 db.connect_to_backend()
 print('Created database tables')
+
+
+mutation = query.register_user(
+        'test@site.com',
+        'passw0rd',
+        models.WomanFemmeAccountType)
+user = db.execute(mutation)
+print(f'New user = {user}')
 db.disconnect()
 
 

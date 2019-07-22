@@ -16,15 +16,15 @@ class MutationId(enum.Enum):
     can be executed.
     '''
     
-    __REGISTER_USER = '__register_user__'
-    __RESET_PASSWORD = '__reset_password__'
-    __DELETE_USER = '__delete_user__'
-    __MATCH_USERS = '__match_users__'
-    __UNMATCH = '__unmatch__'
-    __UPDATE_PROFILE = '__update_user_profile__'
-    __SET_TAGS = '__set_tags__'
-    __UPLOAD_PHOTO = '__upload_photo__'
-    __REMOVE_PHOTO = '__remove_photo__'
+    REGISTER_USER = '__register_user__'
+    RESET_PASSWORD = '__reset_password__'
+    DELETE_USER = '__delete_user__'
+    MATCH_USERS = '__match_users__'
+    UNMATCH = '__unmatch__'
+    UPDATE_PROFILE = '__update_user_profile__'
+    SET_TAGS = '__set_tags__'
+    UPLOAD_PHOTO = '__upload_photo__'
+    REMOVE_PHOTO = '__remove_photo__'
 
 
 AccountType = Union[models.WomanFemmeAccountType, models.ManMascAccountType]
@@ -49,7 +49,7 @@ def register_user(
     '''
 
     password = security.hash_password(password)
-    return Mutation(MutationId.__REGISTER_USER, [email, password, account_type])
+    return Mutation(MutationId.REGISTER_USER, [email, password])
 
 
 def reset_password(updated_user: models.User) -> Mutation:
@@ -58,7 +58,7 @@ def reset_password(updated_user: models.User) -> Mutation:
     '''
 
     new_password = security.hash_password(new_password)
-    return Mutation(MutationId.__RESET_PASSWORD, [user, new_password])
+    return Mutation(MutationId.RESET_PASSWORD, [user, new_password])
 
 
 def delete_user_account(user: models.User) -> Mutation:
@@ -66,28 +66,28 @@ def delete_user_account(user: models.User) -> Mutation:
     and all related data.
     '''
 
-    return Mutation(MutationId.__DELETE_USER, [user])
+    return Mutation(MutationId.DELETE_USER, [user])
 
 
 def establish_match(from_user: models.User, to_user: models.User) -> Mutation:
     '''Create a `Mutation` that creates a match between two users.
     '''
 
-    return Mutation(MutationId.__MATCH_USERS, [from_user, to_user])
+    return Mutation(MutationId.MATCH_USERS, [from_user, to_user])
 
 
 def unmatch(match: models.Match) -> Mutation:
     '''Create a `Mutation` that will delete a match between two users.
     '''
 
-    return Mutation(MutationId.__UNMATCH, [match])
+    return Mutation(MutationId.UNMATCH, [match])
 
 
 def update_user_profile(updated_profile: models.Profile) -> Mutation:
     '''Create a `Mutation` that updates all of the fields in a user's profile.
     '''
 
-    return Mutation(MutationId.__UPDATE_PROFILE, [updated_profile])
+    return Mutation(MutationId.UPDATE_PROFILE, [updated_profile])
 
 
 def set_user_profile_tags(
@@ -98,7 +98,7 @@ def set_user_profile_tags(
     profile.
     '''
 
-    return Mutation(MutationId.__SET_TAGS, [user, tags])
+    return Mutation(MutationId.SET_TAGS, [user, tags])
 
 
 def upload_photo_to_profile(
@@ -108,7 +108,7 @@ def upload_photo_to_profile(
     '''Create a `Mutation` that will relate a new photo to a user's profile.
     '''
 
-    return Mutation(MutationId.__UPLOAD_PHOTO, [profile, photo_src])
+    return Mutation(MutationId.UPLOAD_PHOTO, [profile, photo_src])
 
 
 def remove_photo_from_profile(
@@ -118,7 +118,7 @@ def remove_photo_from_profile(
     '''Create a `Mutation` that will remove a photo from a user's profile.
     '''
     
-    return Mutation(MutationId.__REMOVE_PHOTO, [profile, photo])
+    return Mutation(MutationId.REMOVE_PHOTO, [profile, photo])
 
 
 def set_profile_picture(
@@ -129,4 +129,4 @@ def set_profile_picture(
     picture.
     '''
 
-    return Mutation(MutationId.__SET_PROFILE_PIC, [profile, photo])
+    return Mutation(MutationId.SET_PROFILE_PIC, [profile, photo])

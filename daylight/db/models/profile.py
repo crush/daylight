@@ -1,11 +1,15 @@
 from dataclasses import dataclass
 from typing import Optional, Union
 
-from daylight.db.models import\
-    ManMascAccountType, Photo, User, WomanFemmeAccountType
+from daylight.db.models.user import User
+from daylight.db.models.photo import Photo
+from daylight.db.models.f_account_type import WomanFemmeAccountType
+from daylight.db.models.m_account_type import ManMascAccountType
 
 
-PossibleAccountType = Optional[Union[WomanFemmeAccountType, ManMascAccountType]]
+PossibleAccountType = Optional[Union[
+    WomanFemmeAccountType,
+    ManMascAccountType]]
 
 
 @dataclass

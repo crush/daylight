@@ -5,9 +5,9 @@
 _QUERIES = {
     'init_user_table': '''
     create table if not exists users(
-        id integer primary key,
+        id serial primary key,
         email varchar(255) unique not null,
-        password_hash varchar(128) not null,
+        password_hash varchar(255) not null,
         join_date timestamp not null
     );
     ''',
@@ -51,7 +51,7 @@ _QUERIES = {
 
     'init_profile_table': '''
     create table if not exists profiles(
-        owner integer primary key,
+        owner serial primary key,
         display_name varchar(64) not null,
         pronouns varchar(32) not null,
         profile_photo integer not null,
@@ -83,7 +83,7 @@ _QUERIES = {
 
     'init_photo_table': '''
     create table if not exists photos(
-        id integer primary key,
+        id serial primary key,
         image_source varchar(255) unique not null,
         owner integer not null,
         upload_date timestamp not null,
@@ -94,7 +94,7 @@ _QUERIES = {
 
     'init_man_masc_account_type_table': '''
     create table if not exists man_masc_account_type(
-        owner integer primary key,
+        owner serial primary key,
         num_ratings integer default 0,
         respectfulness_score integer default 0,
         knowledgeable_score integer default 0,
@@ -106,7 +106,7 @@ _QUERIES = {
 
     'init_woman_femme_account_type_table': '''
     create table if not exists woman_femme_account_type(
-        owner integer primary key,
+        owner serial primary key,
 
         foreign key (owner) references users (id)
     );

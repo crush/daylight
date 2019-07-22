@@ -4,7 +4,9 @@ that higher level components should be allowed to execute against the database.
 
 from dataclasses import dataclass
 import enum
-from typing import Any, List
+from typing import Any, List, Union, Union
+
+import daylight.db.models as models
 
 
 class QueryId(enum.Enum):
@@ -12,12 +14,12 @@ class QueryId(enum.Enum):
     can be executed.
     '''
 
-    __RETRIEVE_USER_BY_ID = '__retrieve_user_by_id__'
-    __RETRIEVE_MATCHES_FOR_USER = '__retrieve__matches_for_user__'
-    __RETRIEVE_USER_PROFILE = '__retrieve_user_profile__'
-    __RETRIEVE_TAGS = '__retrieve_profile_tags__'
-    __RETRIEVE_PHOTOS = '__retrieve_profile_photos__'
-    __RETRIEVE_TYPED_PROFILE = '__retrieve_typed__profile__'
+    RETRIEVE_USER_BY_ID = '__retrieve_user_by_id__'
+    RETRIEVE_MATCHES_FOR_USER = '__retrieve__matches_for_user__'
+    RETRIEVE_USER_PROFILE = '__retrieve_user_profile__'
+    RETRIEVE_TAGS = '__retrieve_profile_tags__'
+    RETRIEVE_PHOTOS = '__retrieve_profile_photos__'
+    RETRIEVE_TYPED_PROFILE = '__retrieve_typed__profile__'
 
 
 @dataclass
@@ -37,21 +39,21 @@ def retrieve_user(user_id: int) -> Query:
     '''Create a `Query` capble of searching for a specific user.
     '''
 
-    return Query(QueryId.__RETRIEVE_USER_BY_ID, [user_id])
+    return Query(QueryId.RETRIEVE_USER_BY_ID, [user_id])
 
 
 def retrieve_matches_for_user(user: models.User) -> Query:
     '''Create a `Query` to fetch all matches a user has.
     '''
 
-    return Query(QueryId.__RETRIEVE_MATCHES_FOR_USER, [user])
+    return Query(QueryId.RETRIEVE_MATCHES_FOR_USER, [user])
 
 
 def retrieve_user_profile(user: models.User) -> Query:
     '''Create a `Query` that retrieves the profile information for a user.
     '''
 
-    return Query(QueryId.__RETRIEVE_USER_PROFILE, [user])
+    return Query(QueryId.RETRIEVE_USER_PROFILE, [user])
 
 
 def retrieve_user_tags(user: models.User) -> Query:
@@ -59,7 +61,7 @@ def retrieve_user_tags(user: models.User) -> Query:
     profile.
     '''
 
-    return Query(QueryId.__RETRIEVE_TAGS, [user])
+    return Query(QueryId.RETRIEVE_TAGS, [user])
 
 
 def retrieve_user_photos(user: models.User) -> Query:
@@ -67,7 +69,7 @@ def retrieve_user_photos(user: models.User) -> Query:
     profile.
     '''
 
-    return Query(QueryId.__RETRIEVE_PHOTOS, [user])
+    return Query(QueryId.RETRIEVE_PHOTOS, [user])
 
 
 def retrieve_typed_profile(profile: models.Profile) -> Query:
@@ -75,4 +77,4 @@ def retrieve_typed_profile(profile: models.Profile) -> Query:
     associated with each of the different types of profiles supported.
     '''
 
-    return Query(QueryId.__RETRIEVE_TYPED_PROFILE, [profile])
+    return Query(QueryId.RETRIEVE_TYPED_PROFILE, [profile])

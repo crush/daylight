@@ -9,7 +9,7 @@ from threading import Lock
 import psycopg2 as postgres
 
 import daylight.db.engine.effects as effects
-import effects.State as State
+from daylight.db.engine.effects.state import State
 from daylight.db.engine.query import Mutation, MutationId, Query, QueryId
 from daylight.db.engine.tables import create_tables
 
@@ -99,7 +99,7 @@ class DaylightDB:
         '''
 
         allowed_effects = {
-            QueryId.__RETRIEVE_USER_BY_ID: effects.retrieve_user,
+            QueryId.RETRIEVE_USER_BY_ID: effects.retrieve_user,
         }
 
         effect = allowed_effects.get(q.query_id)
@@ -162,9 +162,9 @@ class DaylightDB:
         '''
 
         allowed_effects = {
-            MutationId.__REGISTER_USER: effects.create_user,
-            MutationId.__RESET_PASSWORD: effects.reset_password,
-            MutationId.__DELETE_USER: effects.delete_user,
+            MutationId.REGISTER_USER: effects.create_user,
+            MutationId.RESET_PASSWORD: effects.reset_password,
+            MutationId.DELETE_USER: effects.delete_user,
         }
 
         effect = allowed_effects.get(m.mutation_id)
@@ -177,7 +177,6 @@ class DaylightDB:
         with self._connection.cursor() as cursor:
             try:
                 result = effect(cursor, *m.parameters)
-                cursor.commit()
 
                 return result
             
@@ -222,4 +221,5 @@ class DaylightDB:
                         f'bad effect {effect.__name__}: {err.message}')
         
             finally:
+                self._connection.commit()
                 self._lock.release()

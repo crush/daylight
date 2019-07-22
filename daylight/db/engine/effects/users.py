@@ -5,7 +5,7 @@ import daylight.db.models as models
 
 
 def create_user(
-        cursor: postgres.cursor,
+        cursor,
         email: str,
         password_hash: str
         ) -> State:
@@ -16,20 +16,18 @@ def create_user(
 
     cursor.execute(
             '''
-            insert into users
+            insert into users (email, password_hash, join_date)
             values (%s, %s, %s)
             returning (id);
             ''',
-            email,
-            password_hash,
-            now)
+            (email, password_hash, now))
 
     user_id = cursor.fetchone()[0]
 
     return models.User(user_id, email, password_hash, now)
 
 
-def delete_user(cursor: postgres.cursor, user: models.User) -> State:
+def delete_user(cursor, user: models.User) -> State:
     '''A mutating effect that attempts to delete an existing user.
     Returns a `User` with effectively nulled values.
     '''
@@ -39,12 +37,12 @@ def delete_user(cursor: postgres.cursor, user: models.User) -> State:
             delete from users
             where id = %s
             ''',
-            user._id)
+            (user._id,))
 
     return models.User(-1, '', '', datetime.now())
 
 
-def reset_password(cursor: postgres.cursor, new_user: models.User) -> State:
+def reset_password(cursor, new_user: models.User) -> State:
     '''A mutating effect that updates a user's password hash with a new value.
     '''
 
@@ -54,13 +52,12 @@ def reset_password(cursor: postgres.cursor, new_user: models.User) -> State:
             set password_hash = %s
             where id = %s
             ''',
-            new_user.password_hash,
-            new_user._id)
+            (new_user.password_hash, new_user._id))
 
     return new_user
 
 
-def retrieve_user(cursor: postgres.cursor, user_id: int) -> State:
+def retrieve_user(cursor, user_id: int) -> State:
     '''A query effect that retrieves information about a user given an ID.
     '''
 
@@ -70,7 +67,7 @@ def retrieve_user(cursor: postgres.cursor, user_id: int) -> State:
             from users
             where id = %s
             ''',
-            user_id)
+            (user_id,))
 
     (email, password_hash, join_date) = cursor.fetchone()
 
