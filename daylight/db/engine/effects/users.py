@@ -29,13 +29,49 @@ def create_user(
     return models.User(user_id, email, password_hash, now)
 
 
-def delete_user(cursor: postgres.cursor) -> State:
-    return []
+def delete_user(cursor: postgres.cursor, user: models.User) -> State:
+    '''A mutating effect that attempts to delete an existing user.
+    Returns a `User` with effectively nulled values.
+    '''
+
+    cursor.execute(
+            '''
+            delete from users
+            where id = %s
+            ''',
+            user._id)
+
+    return models.User(-1, '', '', datetime.now())
 
 
-def reset_password(cursor: postgres.cursor) -> State:
-    return []
+def reset_password(cursor: postgres.cursor, new_user: models.User) -> State:
+    '''A mutating effect that updates a user's password hash with a new value.
+    '''
+
+    cursor.execute(
+            '''
+            update users
+            set password_hash = %s
+            where id = %s
+            ''',
+            new_user.password_hash,
+            new_user._id)
+
+    return new_user
 
 
-def retrieve_user(cursor: postgres.cursor) -> State:
-    return []
+def retrieve_user(cursor: postgres.cursor, user_id: int) -> State:
+    '''A query effect that retrieves information about a user given an ID.
+    '''
+
+    cursor.execute(
+            '''
+            select email, password_hash, join_date
+            from users
+            where id = %s
+            ''',
+            user_id)
+
+    (email, password_hash, join_date) = cursor.fetchone()
+
+    return models.User(user_id, email, password_hash, join_date)
