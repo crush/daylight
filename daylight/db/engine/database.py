@@ -111,7 +111,7 @@ class DaylightDB:
         self._lock.acquire()
         with self._connection.cursor() as cursor:
             try:
-                return effect(cursor, *q.parmeters)
+                return effect(cursor, *q.parameters)
 
             except postgres.InterfaceError as err:
                 raise DBError(

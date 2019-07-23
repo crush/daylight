@@ -38,10 +38,15 @@ print('Created database tables')
 
 
 mutation = query.register_user(
-        'test@site.com',
+        'test4@site.com',
         'passw0rd',
         models.WomanFemmeAccountType)
 user = db.execute(mutation)
+
+query_ = query.retrieve_user(user._id)
+user_copy = db.search(query_)
+print(f'Lookup of user: {user_copy}')
+
 print(f'New user = {user}')
 db.disconnect()
 
