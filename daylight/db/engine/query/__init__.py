@@ -4,18 +4,15 @@ from daylight.db.engine.query.mutation import\
         register_user,\
         reset_password,\
         delete_user_account,\
-        establish_match,\
-        unmatch,\
         update_user_profile,\
-        set_user_profile_tags,\
-        upload_photo_to_profile,\
-        remove_photo_from_profile,\
         set_profile_picture,\
         establish_match,\
         unmatch,\
         delete_photo,\
         set_profile_picture,\
-        upload_photo
+        upload_photo,\
+        update_profile,\
+        set_tags
 
 
 from daylight.db.engine.query.query import\
@@ -28,4 +25,6 @@ from daylight.db.engine.query.query import\
         retrieve_user_photos,\
         retrieve_typed_profile,\
         revoke_like,\
-        send_like
+        send_like,\
+        retrieve_profile,\
+        retrieve_tags

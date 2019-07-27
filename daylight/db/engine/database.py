@@ -100,6 +100,7 @@ class DaylightDB:
 
         allowed_effects = {
             QueryId.RETRIEVE_USER_BY_ID: effects.retrieve_user,
+            QueryId,RETRIEVE_PROFILE: effects.retrieve_profile
         }
 
         effect = allowed_effects.get(q.query_id)
@@ -170,8 +171,8 @@ class DaylightDB:
             MutationId.ESTABLISH_MATCH: effects.establish_match,
             MutationId.UNMATCH: effects.unmatch,
             MutationId.DELETE_PHOTO: effects.delete_photo,
-            MutationId.SET_PROFILE_PHOTO: effects.set_profile_pic,
-            MutationId.UPLOAD_PHOTO: effects.upload_photo
+            MutationId.UPLOAD_PHOTO: effects.upload_photo,
+            MutationId.UPDATE_PROFILE: effects.update_profile
         }
 
         effect = allowed_effects.get(m.mutation_id)

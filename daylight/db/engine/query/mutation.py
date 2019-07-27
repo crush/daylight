@@ -20,10 +20,6 @@ class MutationId(enum.Enum):
     REGISTER_USER = '__register_user__'
     RESET_PASSWORD = '__reset_password__'
     DELETE_USER = '__delete_user__'
-    MATCH_USERS = '__match_users__'
-    UNMATCH = '__unmatch__'
-    UPDATE_PROFILE = '__update_user_profile__'
-    SET_TAGS = '__set_tags__'
     UPLOAD_PHOTO = '__upload_photo__'
     REMOVE_PHOTO = '__remove_photo__'
     REVOKE_LIKE = '__revoke_like__'
@@ -31,8 +27,9 @@ class MutationId(enum.Enum):
     ESTABLISH_MATCH = '__establish_match__'
     UNMATCH = '__unmatch__'
     DELETE_PHOTO = '__delete_photo__'
-    SET_PROFILE_PHOTO = '__set_profile_photo__'
     UPLOAD_PHOTO = '__upload_photo__'
+    UPDATE_PROFILE = '__update_profile__'
+    SET_TAGS = '__set_tags__'
 
 
 AccountType = Union[models.WomanFemmeAccountType, models.ManMascAccountType]
@@ -129,17 +126,6 @@ def remove_photo_from_profile(
     return Mutation(MutationId.REMOVE_PHOTO, [profile, photo])
 
 
-def set_profile_picture(
-        profile: models.Profile,
-        photo: models.Photo
-        ) -> Mutation:
-    '''Create a `Mutation` to set a particular photo as a user's profile
-    picture.
-    '''
-
-    return Mutation(MutationId.SET_PROFILE_PIC, [profile, photo])
-
-
 def revoke_like(like: models.Like) -> Mutation:
     '''Create a `Mutation` that revokes a like from one user to another.
     '''
@@ -187,3 +173,17 @@ def upload_photo(user: models.User, photo_b64: io.BytesIO) -> Mutation:
     '''
 
     return Mutation(MutationId.UPLOAD_PHOTO, [user, photo_b64])
+
+
+def update_profile(profile: models.Profile) -> Mutation:
+    '''Create a `Mutation` that updates a user's profile.
+    '''
+
+    return Mutation(MutationId.UPDATE_PROFILE, [profile])
+
+
+def set_tags(user: models.User, tags: List[models.Tag]) -> Mutation:
+    '''Create a `Mutation` that sets the tags associated with a user's profile.
+    '''
+
+    return Mutation(MutationId.SET_TAGS, [user, tags])
