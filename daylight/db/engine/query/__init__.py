@@ -20,4 +20,6 @@ from daylight.db.engine.query.query import\
         retrieve_user_profile,\
         retrieve_user_tags,\
         retrieve_user_photos,\
-        retrieve_typed_profile
+        retrieve_typed_profile,\
+        revoke_like,\
+        send_like

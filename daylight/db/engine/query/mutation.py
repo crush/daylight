@@ -25,6 +25,8 @@ class MutationId(enum.Enum):
     SET_TAGS = '__set_tags__'
     UPLOAD_PHOTO = '__upload_photo__'
     REMOVE_PHOTO = '__remove_photo__'
+    REVOKE_LIKE = '__revoke_like__'
+    SEND_LIKE = '__send_like__'
 
 
 AccountType = Union[models.WomanFemmeAccountType, models.ManMascAccountType]
@@ -130,3 +132,17 @@ def set_profile_picture(
     '''
 
     return Mutation(MutationId.SET_PROFILE_PIC, [profile, photo])
+
+
+def revoke_like(like: models.Like) -> Mutation:
+    '''Create a `Mutation` that revokes a like from one user to another.
+    '''
+
+    return Mutation(MutationId.REVOKE_LIKE, [like])
+
+
+def send_like(fr: models.User, to: models.User) -> Mutation:
+    '''Create a `Mutation` that registers a like sent from one user to another.
+    '''
+
+    return Mutation(MutationId.SEND_LIKE, [fr, to])
