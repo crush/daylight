@@ -5,6 +5,7 @@ execute against the database.
 
 from dataclasses import dataclass
 import enum
+import io
 from typing import Any, List, Union
 
 import daylight.db.engine.query.security as security
@@ -29,6 +30,9 @@ class MutationId(enum.Enum):
     SEND_LIKE = '__send_like__'
     ESTABLISH_MATCH = '__establish_match__'
     UNMATCH = '__unmatch__'
+    DELETE_PHOTO = '__delete_photo__'
+    SET_PROFILE_PHOTO = '__set_profile_photo__'
+    UPLOAD_PHOTO = '__upload_photo__'
 
 
 AccountType = Union[models.WomanFemmeAccountType, models.ManMascAccountType]
@@ -162,3 +166,24 @@ def unmatch(match: models.Match) -> Mutation:
     '''
 
     return Mutation(MutationId.UNMATCH, [match])
+
+
+def delete_photo(photo: models.Photo) -> Mutation:
+    '''Create a `Mutation` that deletes a photo.
+    '''
+
+    return Mutation(MutationId.DELETE_PHOTO, [photo])
+
+
+def set_profile_picture(user: models.User, photo: models.Photo) -> Mutation:
+    '''Create a `Mutation` that sets a user's profile photo.
+    '''
+
+    return Mutation(MutationId.SET_PROFILE_PHOTO, [user, photo])
+
+
+def upload_photo(user: models.User, photo_b64: io.BytesIO) -> Mutation:
+    '''Create a `Mutation` that uploads a photo to a user's profile.
+    '''
+
+    return Mutation(MutationId.UPLOAD_PHOTO, [user, photo_b64])

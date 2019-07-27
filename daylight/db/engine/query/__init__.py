@@ -12,7 +12,11 @@ from daylight.db.engine.query.mutation import\
         remove_photo_from_profile,\
         set_profile_picture,\
         establish_match,\
-        unmatch
+        unmatch,\
+        delete_photo,\
+        set_profile_picture,\
+        upload_photo
+
 
 from daylight.db.engine.query.query import\
         Query,\
