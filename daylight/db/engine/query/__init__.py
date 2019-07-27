@@ -10,7 +10,9 @@ from daylight.db.engine.query.mutation import\
         set_user_profile_tags,\
         upload_photo_to_profile,\
         remove_photo_from_profile,\
-        set_profile_picture
+        set_profile_picture,\
+        establish_match,\
+        unmatch
 
 from daylight.db.engine.query.query import\
         Query,\

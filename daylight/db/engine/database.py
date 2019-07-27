@@ -165,8 +165,10 @@ class DaylightDB:
             MutationId.REGISTER_USER: effects.create_user,
             MutationId.RESET_PASSWORD: effects.reset_password,
             MutationId.DELETE_USER: effects.delete_user,
-            Mutation.SEND_LIKE: effects.send_like,
-            Mutation.REVOKE_LIKE: effects.revoke_like
+            MutationId.SEND_LIKE: effects.send_like,
+            MutationId.REVOKE_LIKE: effects.revoke_like,
+            MutationId.ESTABLISH_MATCH: effects.establish_match,
+            MutationId.UNMATCH: effects.unmatch
         }
 
         effect = allowed_effects.get(m.mutation_id)

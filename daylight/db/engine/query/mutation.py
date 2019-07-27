@@ -27,6 +27,8 @@ class MutationId(enum.Enum):
     REMOVE_PHOTO = '__remove_photo__'
     REVOKE_LIKE = '__revoke_like__'
     SEND_LIKE = '__send_like__'
+    ESTABLISH_MATCH = '__establish_match__'
+    UNMATCH = '__unmatch__'
 
 
 AccountType = Union[models.WomanFemmeAccountType, models.ManMascAccountType]
@@ -146,3 +148,17 @@ def send_like(fr: models.User, to: models.User) -> Mutation:
     '''
 
     return Mutation(MutationId.SEND_LIKE, [fr, to])
+
+
+def establish_match(fr: models.User, to: models.User) -> Mutation:
+    '''Create a `Mutation` that registers two users as matched.
+    '''
+
+    return Mutation(MutationId.ESTABLISH_MATCH, [fr, to])
+
+
+def unmatch(match: models.Match) -> Mutation:
+    '''Create a `Mutation` that deletes a match.
+    '''
+
+    return Mutation(MutationId.UNMATCH, [match])
