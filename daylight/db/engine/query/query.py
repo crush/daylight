@@ -15,15 +15,11 @@ class QueryId(enum.Enum):
     '''
 
     RETRIEVE_USER_BY_ID = '__retrieve_user_by_id__'
-
-    # TODO: implement these
-    RETRIEVE_TYPED_PROFILE = '__retrieve_typed__profile__'
-    # /TODO
-
     RETRIEVE_PHOTOS = '__retrieve_profile_photos__'
     RETRIEVE_MATCHES = '__retrieve_matches__'
     RETRIEVE_PROFILE = '__retrieve_profile__'
     RETRIEVE_TAGS = '__retrieve_tags__'
+    RETRIEVE_ACCOUNT_TYPE = '__retrieve_account_type'
 
 
 @dataclass
@@ -112,3 +108,11 @@ def retrieve_photos(user: models.User) -> Query:
     '''
 
     return Query(QueryId.RETRIEVE_PHOTOS, [user])
+
+
+def retrieve_account_type(profile: models.Profile) -> Query:
+    '''Create a `Query` that retrieve the additional account type-specific
+    information associated with a user's profile.
+    '''
+
+    return Query(QueryId.RETRIEVE_ACCOUNT_TYPE, [profile])

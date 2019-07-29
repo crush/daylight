@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Optional, Union
 
 from daylight.db.models.user import User
@@ -10,6 +11,14 @@ from daylight.db.models.m_account_type import ManMascAccountType
 PossibleAccountType = Optional[Union[
     WomanFemmeAccountType,
     ManMascAccountType]]
+
+
+class AccountType(Enum):
+    '''Enumerates the supported account types with names.
+    '''
+
+    WOMAN_FEMME = 1
+    MAN_MASC = 2
 
 
 @dataclass

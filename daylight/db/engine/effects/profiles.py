@@ -26,6 +26,32 @@ def retrieve_profile(cursor, user: models.User) -> State:
             atype)
 
 
+def retrieve_account_type(cursor, profile: models.Profile) -> State:
+    '''Retrieve the account-type specific information also associated
+    with the user's profile.
+    '''
+
+    if profile._account_type == models.AccountType.WOMAN_FEMME:
+        return models.WomanFemmeAccountType(profile._owner)
+        
+    cursor.execute(
+            '''
+            select
+                num_ratings,
+                respectfulness_score,
+                knowledgeable_score,
+                supportiveness_score
+            from man_masc_account_type
+            where owner = %s
+            ''',
+            (profile._owner,))
+
+    return [
+        models.ManMascAccountType(profile._owner, *row)
+        for row in cursor.fetchall()
+    ]
+
+
 def update_profile(cursor: profile: models.Profile) -> State:
     '''Update a user's profile information.
     '''
