@@ -5,6 +5,7 @@ from daylight.db.engine.effects.likes import\
         send_like
 from daylight.db.engine.effects.matches import\
         establish_match,\
+        retrieve_matches,\
         unmatch
 from daylight.db.engine.effects.photos import\
         delete_photo,\

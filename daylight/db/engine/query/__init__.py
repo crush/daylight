@@ -12,6 +12,8 @@ from daylight.db.engine.query.mutation import\
         set_profile_picture,\
         upload_photo,\
         update_profile,\
+        revoke_like,\
+        send_like,\
         set_tags
 
 
@@ -19,12 +21,7 @@ from daylight.db.engine.query.query import\
         Query,\
         QueryId,\
         retrieve_user,\
-        retrieve_matches_for_user,\
-        retrieve_user_profile,\
-        retrieve_user_tags,\
-        retrieve_user_photos,\
         retrieve_typed_profile,\
-        revoke_like,\
-        send_like,\
         retrieve_profile,\
-        retrieve_tags
+        retrieve_tags,\
+        retrieve_matches

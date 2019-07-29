@@ -22,6 +22,21 @@ def establish_match(cursor, fr: models.User, to: model.User) -> State:
     return models.Match(fr._id, to._id, now)
 
 
+def retrieve_matches(cursor, user: models.User) -> State:
+    '''Retrieve a list of a user's matches.
+    '''
+
+    cursor.execute(
+            '''
+            select second_user, match_date
+            from matches
+            where first_user = %s;
+            ''',
+            user._id)
+
+    return [models.User(user._id, *row) for row in cursor.fetchall()]
+
+
 def unmatch(cursor, match: models.Match) -> State:
     '''Delete a match.
     '''

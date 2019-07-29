@@ -100,7 +100,9 @@ class DaylightDB:
 
         allowed_effects = {
             QueryId.RETRIEVE_USER_BY_ID: effects.retrieve_user,
-            QueryId,RETRIEVE_PROFILE: effects.retrieve_profile
+            QueryId.RETRIEVE_PROFILE: effects.retrieve_profile,
+            QueryId.RETRIEVE_TAGS: effects.retrieve_tags,
+            QueryId.RETRIEVE_MATCHES: effects.retrieve_matches
         }
 
         effect = allowed_effects.get(q.query_id)

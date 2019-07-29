@@ -17,11 +17,11 @@ class QueryId(enum.Enum):
     RETRIEVE_USER_BY_ID = '__retrieve_user_by_id__'
 
     # TODO: implement these
-    RETRIEVE_MATCHES_FOR_USER = '__retrieve__matches_for_user__'
     RETRIEVE_PHOTOS = '__retrieve_profile_photos__'
     RETRIEVE_TYPED_PROFILE = '__retrieve_typed__profile__'
     # /TODO
 
+    RETRIEVE_MATCHES = '__retrieve_matches__'
     RETRIEVE_PROFILE = '__retrieve_profile__'
     RETRIEVE_TAGS = '__retrieve_tags__'
 
@@ -91,9 +91,16 @@ def retrieve_profile(user: models.User) -> Query:
     return Query(QueryId.RETRIEVE_PROFILE, [user])
 
 
-def retrieve_tags(user: models.User) -> Quejry:
+def retrieve_tags(user: models.User) -> Query:
     '''Create a `Query` that will retrieve a list of tags associated with a
     user's profile.
     '''
 
     return Query(QueryId.RETRIEVE_TAGS, [user])
+
+
+def retrieve_matches(user: models.User) -> Query:
+    '''Create a `Query` that will retrieve a list of a user's matches.
+    '''
+
+    return Query(QueryId.RETRIEVE_MATCHES, [user])
