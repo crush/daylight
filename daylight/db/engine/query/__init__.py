@@ -24,4 +24,5 @@ from daylight.db.engine.query.query import\
         retrieve_typed_profile,\
         retrieve_profile,\
         retrieve_tags,\
-        retrieve_matches
+        retrieve_matches,\
+        retrieve_photos

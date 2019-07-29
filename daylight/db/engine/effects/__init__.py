@@ -9,6 +9,7 @@ from daylight.db.engine.effects.matches import\
         unmatch
 from daylight.db.engine.effects.photos import\
         delete_photo,\
+        retrieve_photos,\
         set_profile_pic,\
         upload_photo
 from daylight.db.engine.effects.profiles import\

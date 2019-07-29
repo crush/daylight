@@ -17,10 +17,10 @@ class QueryId(enum.Enum):
     RETRIEVE_USER_BY_ID = '__retrieve_user_by_id__'
 
     # TODO: implement these
-    RETRIEVE_PHOTOS = '__retrieve_profile_photos__'
     RETRIEVE_TYPED_PROFILE = '__retrieve_typed__profile__'
     # /TODO
 
+    RETRIEVE_PHOTOS = '__retrieve_profile_photos__'
     RETRIEVE_MATCHES = '__retrieve_matches__'
     RETRIEVE_PROFILE = '__retrieve_profile__'
     RETRIEVE_TAGS = '__retrieve_tags__'
@@ -104,3 +104,11 @@ def retrieve_matches(user: models.User) -> Query:
     '''
 
     return Query(QueryId.RETRIEVE_MATCHES, [user])
+
+
+def retrieve_photos(user: models.User) -> Query:
+    '''Create a `Query` that will retrieve a list of photos uploaded to a
+    user's account.
+    '''
+
+    return Query(QueryId.RETRIEVE_PHOTOS, [user])

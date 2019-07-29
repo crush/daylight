@@ -21,6 +21,24 @@ def delete_photo(cursor, photo: models.Photo) -> State:
     return models.Photo(-1, '', -1, datetime.now())
 
 
+def retrieve_photos(cursor, user: models.User) -> State:
+    '''Retrieve the list of photos uploaded to a user's account.
+    '''
+
+    cursor.execute(
+            '''
+            select id, image_source, upload_date
+            from photos
+            where owner = %s;
+            ''',
+            (user._id,))
+
+    return [
+        models.Photo(row[0], row[1], user._id, row[2])
+        for row in cursor.fetchall()
+    ]
+
+
 def set_profile_pic(cursor, user: models.User, photo: modesl.Photo) -> State:
     '''Set a user's profile photo to a picture they've uploaded.
     '''
