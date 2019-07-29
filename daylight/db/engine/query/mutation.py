@@ -20,8 +20,6 @@ class MutationId(enum.Enum):
     REGISTER_USER = '__register_user__'
     RESET_PASSWORD = '__reset_password__'
     DELETE_USER = '__delete_user__'
-    UPLOAD_PHOTO = '__upload_photo__'
-    REMOVE_PHOTO = '__remove_photo__'
     REVOKE_LIKE = '__revoke_like__'
     SEND_LIKE = '__send_like__'
     ESTABLISH_MATCH = '__establish_match__'
@@ -88,44 +86,6 @@ def unmatch(match: models.Match) -> Mutation:
     return Mutation(MutationId.UNMATCH, [match])
 
 
-def update_user_profile(updated_profile: models.Profile) -> Mutation:
-    '''Create a `Mutation` that updates all of the fields in a user's profile.
-    '''
-
-    return Mutation(MutationId.UPDATE_PROFILE, [updated_profile])
-
-
-def set_user_profile_tags(
-        user: models.User,
-        tags: List[models.Tag]
-        ) -> Mutation:
-    '''Create a `Mutation` that will set the tags associated with a user's
-    profile.
-    '''
-
-    return Mutation(MutationId.SET_TAGS, [user, tags])
-
-
-def upload_photo_to_profile(
-        profile: models.Profile,
-        photo_src: str
-        ) -> Mutation:
-    '''Create a `Mutation` that will relate a new photo to a user's profile.
-    '''
-
-    return Mutation(MutationId.UPLOAD_PHOTO, [profile, photo_src])
-
-
-def remove_photo_from_profile(
-        profile: models.Profile,
-        photo: models.Photo
-        ) -> Mutation:
-    '''Create a `Mutation` that will remove a photo from a user's profile.
-    '''
-    
-    return Mutation(MutationId.REMOVE_PHOTO, [profile, photo])
-
-
 def revoke_like(like: models.Like) -> Mutation:
     '''Create a `Mutation` that revokes a like from one user to another.
     '''
@@ -159,13 +119,6 @@ def delete_photo(photo: models.Photo) -> Mutation:
     '''
 
     return Mutation(MutationId.DELETE_PHOTO, [photo])
-
-
-def set_profile_picture(user: models.User, photo: models.Photo) -> Mutation:
-    '''Create a `Mutation` that sets a user's profile photo.
-    '''
-
-    return Mutation(MutationId.SET_PROFILE_PHOTO, [user, photo])
 
 
 def upload_photo(user: models.User, photo_b64: io.BytesIO) -> Mutation:

@@ -176,7 +176,8 @@ class DaylightDB:
             MutationId.UNMATCH: effects.unmatch,
             MutationId.DELETE_PHOTO: effects.delete_photo,
             MutationId.UPLOAD_PHOTO: effects.upload_photo,
-            MutationId.UPDATE_PROFILE: effects.update_profile
+            MutationId.UPDATE_PROFILE: effects.update_profile,
+            MutationId.SET_TAGS: effects.set_tags
         }
 
         effect = allowed_effects.get(m.mutation_id)
