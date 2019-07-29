@@ -14,7 +14,7 @@ def retrieve_tags(cursor, user: models.User) -> State:
             from profile_tag_relation
             where profile = %s;
             ''',
-            user._id)
+            (user._id,))
 
     return [models.Tag(row[0]) for row in cursor.fetchall()]
 
@@ -28,7 +28,7 @@ def set_tags(cursor, user: models.User, tags: List[models.Tag]) -> State:
             delete from profile_tag_relation
             where profile = %s;
             ''',
-            user._id)
+            (user._id,))
 
     for tag in tags:
         cursor.execute(
@@ -36,7 +36,6 @@ def set_tags(cursor, user: models.User, tags: List[models.Tag]) -> State:
                 insert into profile_tag_relation (profile, tag)
                 values (%s, %s);
                 ''',
-                user._id,
-                tag)
+                (user._id, tag))
 
     return tags

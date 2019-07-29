@@ -14,8 +14,7 @@ def revoke_like(cursor, like: models.Like) -> State:
             where from_user = %s
               and to_user = %s;
             ''',
-            like._from_user,
-            like._to_user)
+            (like._from_user, like._to_user))
 
     return models.Like(-1, -1, datetime.now())
 
@@ -31,8 +30,6 @@ def send_like(cursor, fr: models.User, to: models.User) -> State:
             insert into likes_relation (from_user, to_user, send_date)
             values (%s, %s, %s);
             ''',
-            fr._id,
-            to._id,
-            now)
+            (fr._id, to._id, now))
 
     return models.Like(fr._id, to._id, now)

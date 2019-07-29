@@ -13,7 +13,7 @@ def retrieve_profile(cursor, user: models.User) -> State:
             from profiles
             where owner = %s;
             ''',
-            user._id)
+            (user._id,))
 
     [display_name, pronouns, pro_photo, bio, atype] = cursor.fetchone()
 
@@ -39,10 +39,10 @@ def update_profile(cursor: profile: models.Profile) -> State:
                 biography = %s
             where owner = %s
             ''',
-            profile.display_name,
-            profile.pronouns,
-            profile._profile_photo,
-            profile.biography,
-            profile._owner)
+            (profile.display_name,
+             profile.pronouns,
+             profile._profile_photo,
+             profile.biography,
+             profile._owner))
 
     return profile

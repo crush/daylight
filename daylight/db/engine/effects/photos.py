@@ -16,7 +16,7 @@ def delete_photo(cursor, photo: models.Photo) -> State:
             delete from photos
             where id = %s;
             ''',
-            phoo._id)
+            (photo._id,))
 
     return models.Photo(-1, '', -1, datetime.now())
 
@@ -31,8 +31,7 @@ def set_profile_pic(cursor, user: models.User, photo: modesl.Photo) -> State:
             set profile_photo = %s
             where owner = %s;
             ''',
-            photo._id,
-            user._id)
+            (photo._id, user._id))
 
     return photo
 
@@ -53,9 +52,7 @@ def upload_photo(cursor, user: models.User, byte_stream: io.BytesIO) -> State:
             values (%s, %s, %s)
             returning id;
             ''',
-            image_src,
-            user._id,
-            now)
+            (image_src, user._id, now))
 
     photo_id = cursor.fetch_one()[0]
 
