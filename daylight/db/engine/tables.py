@@ -54,7 +54,7 @@ _QUERIES = {
         owner serial primary key,
         display_name varchar(64) not null,
         pronouns varchar(32) not null,
-        profile_photo integer not null,
+        profile_photo integer,
         biography text not null,
         account_type smallint not null,
 

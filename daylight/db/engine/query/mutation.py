@@ -52,7 +52,7 @@ def register_user(
     '''
 
     password = security.hash_password(password)
-    return Mutation(MutationId.REGISTER_USER, [email, password])
+    return Mutation(MutationId.REGISTER_USER, [email, password, account_type])
 
 
 def reset_password(updated_user: models.User) -> Mutation:

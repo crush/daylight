@@ -1,13 +1,15 @@
 from datetime import datetime
 
 from daylight.db.engine.effects.state import State
+from daylight.db.models import AccountType
 import daylight.db.models as models
 
 
 def create_user(
         cursor,
         email: str,
-        password_hash: str
+        password_hash: str,
+        account_type: AccountType
         ) -> State:
     '''A mutating effect that attempts to register a new user.
     '''
@@ -23,6 +25,40 @@ def create_user(
             (email, password_hash, now))
 
     user_id = cursor.fetchone()[0]
+
+    cursor.execute(
+            '''
+            insert into profiles (
+                owner,
+                display_name,
+                pronouns,
+                biography,
+                account_type
+            )
+            values (%s, %s, %s, %s, %s);
+            ''',
+            (user_id, '', '', '', account_type))
+
+    if account_type == AccountType.WOMAN_FEMME:
+        cursor.execute(
+                '''
+                insert into woman_femme_account_type (owner)
+                values (%s);
+                ''',
+                (user_id,))
+    else:
+        cursor.execute(
+                '''
+                insert into man_masc_account_type (
+                    owner,
+                    num_ratings,
+                    respectfulness_score,
+                    knowledgeable_score,
+                    supportiveness_score
+                )
+                values (%s, %s, %s, %s, %s);
+                ''',
+                (user_id, 0, 0, 0, 0))
 
     return models.User(user_id, email, password_hash, now)
 
