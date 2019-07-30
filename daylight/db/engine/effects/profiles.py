@@ -59,9 +59,9 @@ def update_profile(cursor, profile: models.Profile) -> State:
     cursor.execute(
             '''
             update profiles
-            set display_name = %s
-                pronouns = %s
-                profile_photo = %s
+            set display_name = %s,
+                pronouns = %s,
+                profile_photo = %s,
                 biography = %s
             where owner = %s
             ''',

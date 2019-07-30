@@ -13,42 +13,36 @@ app = Flask(__name__)
 app.config.from_object("daylight.default_settings")
 app.config.from_envvar("DAYLIGHT_SETTINGS")
 
-if not app.debug:
-    import logging
-    from logging.handlers import TimedRotatingFileHandler
 
-    # https://docs.python.org/3.6/library/logging.handlers.html#timedrotatingfilehandler
-    file_handler = TimedRotatingFileHandler(
-        os.path.join(app.config["LOG_DIR"], "daylight.log"), "midnight"
-    )
-    file_handler.setLevel(logging.WARNING)
-    file_handler.setFormatter(
-        logging.Formatter("<%(asctime)s> <%(levelname)s> %(message)s")
-    )
-    app.logger.addHandler(file_handler)
+def main():
+    if not app.debug:
+        import logging
+        from logging.handlers import TimedRotatingFileHandler
 
-
-cfg = config.load(dev.DEFAULTS)
-print('Loaded configuration', cfg)
+        # https://docs.python.org/3.6/library/logging.handlers.html#timedrotatingfilehandler
+        file_handler = TimedRotatingFileHandler(
+            os.path.join(app.config["LOG_DIR"], "daylight.log"), "midnight"
+        )
+        file_handler.setLevel(logging.WARNING)
+        file_handler.setFormatter(
+            logging.Formatter("<%(asctime)s> <%(levelname)s> %(message)s")
+        )
+        app.logger.addHandler(file_handler)
 
 
-db = DaylightDB(config.postgres_url(cfg))
-db.connect_to_backend()
-print('Created database tables')
+    cfg = config.load(dev.DEFAULTS)
+    print('Loaded configuration', cfg)
 
 
-mutation = query.register_user(
-        'test10@site.com',
-        'passw0rd',
-        models.WomanFemmeAccountType)
-user = db.execute(mutation)
+    db = DaylightDB(config.postgres_url(cfg))
+    db.connect_to_backend()
+    print('Created database tables')
 
-query_ = query.retrieve_user(user._id)
-user_copy = db.search(query_)
-print(f'Lookup of user: {user_copy}')
-
-print(f'New user = {user}')
-db.disconnect()
+    db.disconnect()
 
 
-import daylight.routes
+    import daylight.routes
+
+
+if __name__ == '__main__':
+    main()
