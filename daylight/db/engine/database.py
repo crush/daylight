@@ -121,42 +121,42 @@ class DaylightDB:
             except postgres.InterfaceError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'{err.message}')
+                        f'{err}')
 
             except postgres.DatabaseError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'{err.message}')
+                        f'{err}')
 
             except postgres.DataError as err:
                 raise DBError(
                         DBErrorKind.EXECUTION_ERROR,
-                        f'query execution failed: {err.message}')
+                        f'query execution failed: {err}')
 
             except postgres.OperationalError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'unexpected database error: {err.message}')
+                        f'unexpected database error: {err}')
 
             except postgres.IntegrityError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'failed to maintain relation integrity: {err.message}')
+                        f'failed to maintain relation integrity: {err}')
 
             except postgres.InternalError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'unexpected database error {err.message}')
+                        f'unexpected database error {err}')
 
             except postgres.ProgrammingError as err:
                 raise DBError(
                         DBErrorKind.PROGRAMMING_ERROR,
-                        f'bad effect {effect.__name__}: {err.message}')
+                        f'bad effect {effect.__name__}: {err}')
 
             except postgres.NotSupportedError as err:
                 raise DBError(
                         DBErrorKind.PROGRAMMING_ERROR,
-                        f'bad effect {effect.__name__}: {err.message}')
+                        f'bad effect {effect.__name__}: {err}')
        
             finally:
                 self._lock.release()
@@ -196,42 +196,42 @@ class DaylightDB:
             except postgres.InterfaceError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'{err.message}')
+                        f'{err}')
 
             except postgres.DatabaseError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'{err.message}')
+                        f'{err}')
 
             except postgres.DataError as err:
                 raise DBError(
                         DBErrorKind.EXECUTION_ERROR,
-                        f'query execution failed: {err.message}')
+                        f'query execution failed: {err}')
 
             except postgres.OperationalError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'unexpected database error: {err.message}')
+                        f'unexpected database error: {err}')
 
             except postgres.IntegrityError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'failed to maintain relation integrity: {err.message}')
+                        f'failed to maintain relation integrity: {err}')
 
             except postgres.InternalError as err:
                 raise DBError(
                         DBErrorKind.INTERNAL_ERROR,
-                        f'unexpected database error {err.message}')
+                        f'unexpected database error {err}')
 
             except postgres.ProgrammingError as err:
                 raise DBError(
                         DBErrorKind.PROGRAMMING_ERROR,
-                        f'bad effect {effect.__name__}: {err.message}')
+                        f'bad effect {effect.__name__}: {err}')
 
             except postgres.NotSupportedError as err:
                 raise DBError(
                         DBErrorKind.PROGRAMMING_ERROR,
-                        f'bad effect {effect.__name__}: {err.message}')
+                        f'bad effect {effect.__name__}: {err}')
         
             finally:
                 self._connection.commit()
