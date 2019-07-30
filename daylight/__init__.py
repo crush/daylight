@@ -38,7 +38,7 @@ print('Created database tables')
 
 
 mutation = query.register_user(
-        'test4@site.com',
+        'test10@site.com',
         'passw0rd',
         models.WomanFemmeAccountType)
 user = db.execute(mutation)
