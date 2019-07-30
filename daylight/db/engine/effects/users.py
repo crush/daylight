@@ -15,6 +15,7 @@ def create_user(
     '''
 
     now = datetime.now()
+    _type = 1 if account_type == AccountType.WOMAN_FEMME else 2
 
     cursor.execute(
             '''
@@ -37,7 +38,7 @@ def create_user(
             )
             values (%s, %s, %s, %s, %s);
             ''',
-            (user_id, '', '', '', account_type))
+            (user_id, '', '', '', _type))
 
     if account_type == AccountType.WOMAN_FEMME:
         cursor.execute(
