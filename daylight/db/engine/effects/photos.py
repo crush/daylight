@@ -1,7 +1,7 @@
 from datetime import datetime
 import io
 
-from dayfrom daylight.db.engine.effects.state import State
+from daylight.db.engine.effects.state import State
 import daylight.db.models as models
 
 
@@ -39,7 +39,7 @@ def retrieve_photos(cursor, user: models.User) -> State:
     ]
 
 
-def set_profile_pic(cursor, user: models.User, photo: modesl.Photo) -> State:
+def set_profile_pic(cursor, user: models.User, photo: models.Photo) -> State:
     '''Set a user's profile photo to a picture they've uploaded.
     '''
 

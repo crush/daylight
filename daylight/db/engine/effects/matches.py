@@ -4,7 +4,7 @@ from daylight.db.engine.effects.state import State
 import daylight.db.models as models
 
 
-def establish_match(cursor, fr: models.User, to: model.User) -> State:
+def establish_match(cursor, fr: models.User, to: models.User) -> State:
     '''Create a match between two users.
     '''
 

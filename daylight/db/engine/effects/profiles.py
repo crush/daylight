@@ -52,7 +52,7 @@ def retrieve_account_type(cursor, profile: models.Profile) -> State:
     ]
 
 
-def update_profile(cursor: profile: models.Profile) -> State:
+def update_profile(cursor, profile: models.Profile) -> State:
     '''Update a user's profile information.
     '''
 
