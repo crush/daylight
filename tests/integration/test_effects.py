@@ -46,3 +46,23 @@ class TestEffects(TestCase):
         updated_profile = self.db.search(query.retrieve_profile(new_user))
 
         assert updated_profile.biography == profile.biography
+
+    
+    def test_match_lifecycle(self):
+        user1 = self.db.execute(query.register_user(
+            _random_email(),
+            'Password1',
+            models.AccountType.WOMAN_FEMME))
+
+        user2 = self.db.execute(query.register_user(
+            _random_email(),
+            'Password2',
+            models.AccountType.MAN_MASC))
+        
+        match = self.db.execute(query.establish_match(user1, user2))
+
+        self.db.execute(query.unmatch(match))
+
+        matches = self.db.search(query.retrieve_matches(user1))
+
+        assert len(matches) == 0
