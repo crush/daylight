@@ -7,3 +7,9 @@ class Tag:
     '''
 
     tag: str
+
+
+AllowedTags = [
+    Tag('bondage'),
+    Tag('cosplay')
+]

@@ -1,6 +1,8 @@
 '''SQL to initialize daylight's relational database tables.
 '''
 
+from daylight.db.models import AllowedTags
+
 
 _QUERIES = {
     'init_user_table': '''
@@ -113,6 +115,11 @@ _QUERIES = {
     '''
 }
 
+INIT_TAG_QUERY = '''
+    insert into tags (tag)
+    values (%s)
+    on conflict (tag) do nothing;
+'''
 
 def create_tables(db_conn):
     '''Execute each query to initialize all datbase tables.
@@ -133,5 +140,8 @@ def create_tables(db_conn):
 
     for query in order:
         db_conn.execute(_QUERIES[query])
+
+    for tag in AllowedTags:
+        db_conn.execute(INIT_TAG_QUERY, (tag.tag,))
 
     return True
