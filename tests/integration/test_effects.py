@@ -1,3 +1,4 @@
+import io
 import random
 import string
 from unittest import TestCase
@@ -104,3 +105,23 @@ class TestEffects(TestCase):
         found_likes = self.db.search(query.retrieve_likes(user1))
 
         assert len(found_likes) == 0
+
+
+    def test_photo_lifecycle(self):
+        user = self.db.execute(query.register_user(
+            _random_email(),
+            'password',
+            models.AccountType.WOMAN_FEMME))
+
+        photo_stream = io.BytesIO(b'test')
+        photo = self.db.execute(query.upload_photo(user, photo_stream))
+
+        found_photos = self.db.search(query.retrieve_photos(user))
+
+        assert len(found_photos) == 1
+
+        self.db.execute(query.delete_photo(photo))
+
+        found_photos = self.db.search(query.retrieve_photos(user))
+
+        assert len(found_photos) == 0
