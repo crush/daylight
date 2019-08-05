@@ -60,6 +60,10 @@ class TestEffects(TestCase):
             models.AccountType.MAN_MASC))
         
         match = self.db.execute(query.establish_match(user1, user2))
+        
+        matches = self.db.search(query.retrieve_matches(user1))
+
+        assert len(matches) == 1
 
         self.db.execute(query.unmatch(match))
 
