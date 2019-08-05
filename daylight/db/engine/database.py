@@ -104,7 +104,8 @@ class DaylightDB:
             QueryId.RETRIEVE_TAGS: effects.retrieve_tags,
             QueryId.RETRIEVE_MATCHES: effects.retrieve_matches,
             QueryId.RETRIEVE_PHOTOS: effects.retrieve_photos,
-            QueryId.RETRIEVE_ACCOUNT_TYPE: effects.retrieve_account_type
+            QueryId.RETRIEVE_ACCOUNT_TYPE: effects.retrieve_account_type,
+            QueryId.RETRIEVE_LIKES: effects.retrieve_likes
         }
 
         effect = allowed_effects.get(q.query_id)

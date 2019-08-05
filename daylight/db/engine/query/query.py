@@ -19,7 +19,8 @@ class QueryId(enum.Enum):
     RETRIEVE_MATCHES = '__retrieve_matches__'
     RETRIEVE_PROFILE = '__retrieve_profile__'
     RETRIEVE_TAGS = '__retrieve_tags__'
-    RETRIEVE_ACCOUNT_TYPE = '__retrieve_account_type'
+    RETRIEVE_ACCOUNT_TYPE = '__retrieve_account_type__'
+    RETRIEVE_LIKES = '__retrieve_likes__'
 
 
 @dataclass
@@ -78,3 +79,10 @@ def retrieve_account_type(profile: models.Profile) -> Query:
     '''
 
     return Query(QueryId.RETRIEVE_ACCOUNT_TYPE, [profile])
+
+
+def retrieve_likes(user: models.User) -> Query:
+    '''Create a `Query` that retrieves a list of the likes sent by a user.
+    '''
+
+    return Query(QueryId.RETRIEVE_LIKES, [user])

@@ -4,6 +4,21 @@ from daylight.db.engine.effects.state import State
 import daylight.db.models as models
 
 
+def retrieve_likes(cursor, user: models.User) -> State:
+    '''Retrieve the likes a user has sent.
+    '''
+
+    cursor.execute(
+            '''
+            select to_user, send_date
+            from likes_relation
+            where from_user = %s;
+            ''',
+            (user._id,))
+
+    return [models.Like(user._id, *row) for row in cursor.fetchall()]
+
+
 def revoke_like(cursor, like: models.Like) -> State:
     '''Revoke a like formerly sent by one user to another user.
     '''
