@@ -31,7 +31,7 @@ class TestEffects(TestCase):
         self.db.disconnect()
 
 
-    def test_profile_creation(self):
+    def test_user_lifecycle(self):
         new_user = self.db.execute(query.register_user(
             _random_email(),
             'P455w()rD!',
@@ -46,6 +46,16 @@ class TestEffects(TestCase):
         updated_profile = self.db.search(query.retrieve_profile(new_user))
 
         assert updated_profile.biography == profile.biography
+
+        self.db.execute(query.set_tags(new_user, [
+            models.Tag('bondage'),
+            models.Tag('cosplay')
+        ]))
+
+        tags = self.db.search(query.retrieve_tags(new_user))
+        tag_names = sorted([t.tag for t in tags])
+
+        assert tag_names == ['bondage', 'cosplay']
 
     
     def test_match_lifecycle(self):
