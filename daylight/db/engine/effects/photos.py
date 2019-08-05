@@ -1,5 +1,6 @@
 from datetime import datetime
 import io
+import random
 
 from daylight.db.engine.effects.state import State
 import daylight.db.models as models
@@ -60,7 +61,8 @@ def upload_photo(cursor, user: models.User, byte_stream: io.BytesIO) -> State:
 
     # TODO: Save to image store.
 
-    image_src = ''
+    allowed = 'ABCDEF0123456789'
+    image_src = ''.join([random.choice(allowed) for _ in range(32)])
 
     now = datetime.now()
 
@@ -72,6 +74,6 @@ def upload_photo(cursor, user: models.User, byte_stream: io.BytesIO) -> State:
             ''',
             (image_src, user._id, now))
 
-    photo_id = cursor.fetch_one()[0]
+    photo_id = cursor.fetchone()[0]
 
     return models.Photo(photo_id, image_src, user._id, now)
