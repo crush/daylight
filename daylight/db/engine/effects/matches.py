@@ -32,7 +32,7 @@ def retrieve_matches(cursor, user: models.User) -> State:
             ''',
             (user._id,))
 
-    return [models.User(user._id, *row) for row in cursor.fetchall()]
+    return [models.Match(user._id, *row) for row in cursor.fetchall()]
 
 
 def unmatch(cursor, match: models.Match) -> State:
@@ -45,6 +45,6 @@ def unmatch(cursor, match: models.Match) -> State:
             where first_user = %s
               and second_user = %s;
             ''',
-            (match._first_user, match._second_usere))
+            (match._first_user, match._second_user))
 
     return models.Match(-1, -1, datetime.now())
