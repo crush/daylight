@@ -80,3 +80,27 @@ class TestEffects(TestCase):
         matches = self.db.search(query.retrieve_matches(user1))
 
         assert len(matches) == 0
+
+
+    def test_like_lifecycle(self):
+        user1 = self.db.execute(query.register_user(
+            _random_email(),
+            'Password1',
+            models.AccountType.WOMAN_FEMME))
+
+        user2 = self.db.execute(query.register_user(
+            _random_email(),
+            'Password2',
+            models.AccountType.MAN_MASC))
+        
+        like = self.db.execute(query.send_like(user1, user2))
+        
+        likes = self.db.search(query.retrieve_likes(user1))
+
+        assert len(likes) == 1
+
+        self.db.execute(query.revoke_like(like))
+
+        found_likes = self.db.search(query.retrieve_likes(user1))
+
+        assert len(found_likes) == 0
