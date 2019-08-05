@@ -36,6 +36,6 @@ def set_tags(cursor, user: models.User, tags: List[models.Tag]) -> State:
                 insert into profile_tag_relation (profile, tag)
                 values (%s, %s);
                 ''',
-                (user._id, tag))
+                (user._id, tag.tag))
 
     return tags
